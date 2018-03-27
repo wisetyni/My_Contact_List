@@ -11,4 +11,11 @@
     <string name="hint_contact_city">City</string>
     <string name="hint_contact_state">State</string>
     <string name="hint_contact_zipCode">ZipCode</string>
+    <string name="hint_contact_home">Home Phone</string>
+    <string name="hint_contact_cell">Cell Phone</string>
+    <string name="hint_contact_email">E-Mail Address</string>
+
+
+
+
 </resources>
