@@ -26,7 +26,6 @@ public class BirthdayPickerFragment extends DialogFragment implements DatePicker
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
 
-        getDialog().setTitle("Select Date");
         final Calendar c = Calendar.getInstance();
         int year = c.get(Calendar.YEAR);
         int month = c. get (Calendar.MONTH);
@@ -46,7 +45,7 @@ public class BirthdayPickerFragment extends DialogFragment implements DatePicker
 
         TextView textview = (TextView)getActivity().findViewById(R.id.textBirthday);
 
-        textview.setText(dayOfMonth + ":" + (month+1) + ":" + year);
+        textview.setText((month+1) + "/" + dayOfMonth + "/" + year);
 
     }
 }
