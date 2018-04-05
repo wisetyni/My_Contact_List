@@ -7,13 +7,16 @@ import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 public class ContactListActivity extends AppCompatActivity {
 
-    private TextView mTextMessage;
+    private TextView mTextMessage, birthday;
     private ImageView mCalendar;
+    private Contact mCurrentContact;
+    private EditText name, streetAddress, city, zipCode, homePhone, cellPhone, email, state;
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -52,6 +55,21 @@ public class ContactListActivity extends AppCompatActivity {
                 bdayPickerFragment.show(getSupportFragmentManager(), "birthdayPicker");
             }
         });
+
+        initializeViews();
+
+        mCurrentContact = new Contact();
+    }
+
+    private void initializeViews() {
+        name = findViewById(R.id.editName);
+        homePhone = findViewById(R.id.editHomePhone);
+        cellPhone = findViewById(R.id.editCell);
+        city = findViewById(R.id.editCity);
+        streetAddress  = findViewById(R.id.editAddress);
+        state = findViewById(R.id.editState);
+        zipCode = findViewById(R.id.editZipCode);
+        email = findViewById(R.id.editEMail);
     }
 
 }

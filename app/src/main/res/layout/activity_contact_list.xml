@@ -33,7 +33,7 @@
                 android:layout_alignParentTop="true">
 
                 <EditText
-                    android:id="@+id/textName"
+                    android:id="@+id/editName"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="@string/hint_contact_name"
@@ -108,7 +108,7 @@
                 android:layout_alignBottom="@id/input_layout_city">
 
                 <EditText
-                    android:id="@+id/edit_zip_code"
+                    android:id="@+id/editZipCode"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="@string/hint_contact_zipCode"
@@ -127,7 +127,7 @@
                 android:layout_below="@id/input_layout_city">
 
                 <EditText
-                    android:id="@+id/editHome"
+                    android:id="@+id/editHomePhone"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:hint="@string/hint_contact_home"
