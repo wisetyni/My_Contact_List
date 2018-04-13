@@ -8,12 +8,39 @@
     android:layout_height="match_parent"
     tools:context="mycontactlist.example.com.my_contact_list.ContactListActivity">
 
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_alignParentTop="true"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="@color/colorPrimaryDark"
+        >
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/white"
+        android:gravity="left"
+        tools:text="OFF"
+        android:id="@+id/off"
+        style="@style/TextAppearance.AppCompat.Widget.ActionBar.Title"/>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/white"
+            android:gravity="right"
+            tools:text="SAVE"
+            android:id="@+id/save"
+            style="@style/TextAppearance.AppCompat.Widget.ActionBar.Title"/>
+    </android.support.v7.widget.Toolbar>
+
     <ScrollView
         android:id="@+id/scrollView1"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_alignParentLeft="true"
         android:layout_above="@id/navigation"
+        android:layout_below="@+id/toolbar"
         android:layout_marginLeft="@dimen/activity_vertical_margin"
         android:layout_marginTop="@dimen/activity_horizontal_margin"
         android:layout_marginBottom="@dimen/activity_horizontal_margin"
@@ -113,7 +140,7 @@
                     android:layout_height="wrap_content"
                     android:hint="@string/hint_contact_zipCode"
                     android:imeOptions="actionNext"
-                    android:inputType="textCapCharacters"
+                    android:inputType="numberSigned"
                     android:textSize="14sp"
                     android:ems="4"/>
             </android.support.design.widget.TextInputLayout>
@@ -151,7 +178,7 @@
                     android:layout_height="wrap_content"
                     android:hint="@string/hint_contact_cell"
                     android:imeOptions="actionNext"
-                    android:inputType="numberSigned"
+                    android:inputType="phone"
                     android:textSize="14sp"
                     android:ems="11"/>
             </android.support.design.widget.TextInputLayout>
@@ -168,7 +195,7 @@
                     android:layout_height="wrap_content"
                     android:hint="@string/hint_contact_email"
                     android:imeOptions="actionNext"
-                    android:inputType="numberSigned"
+                    android:inputType="textEmailAddress"
                     android:textSize="14sp" />
             </android.support.design.widget.TextInputLayout>
 
@@ -202,6 +229,14 @@
                 android:layout_alignBottom="@id/textBirthday"
                 android:paddingRight="@dimen/activity_vertical_margin"
                 android:paddingLeft="@dimen/activity_vertical_margin"/>
+
+            <Button
+                android:id="@+id/saveContactBtn"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/textBirthday"
+                android:layout_marginTop="24dp"
+                android:text="Save"/>
         </RelativeLayout>
 
 

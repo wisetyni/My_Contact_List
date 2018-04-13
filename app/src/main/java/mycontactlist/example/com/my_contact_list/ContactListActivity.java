@@ -1,12 +1,16 @@
 package mycontactlist.example.com.my_contact_list;
 
+import android.arch.lifecycle.ViewModelProviders;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AppCompatActivity;
+import android.telephony.PhoneNumberFormattingTextWatcher;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -17,6 +21,8 @@ public class ContactListActivity extends AppCompatActivity {
     private ImageView mCalendar;
     private Contact mCurrentContact;
     private EditText name, streetAddress, city, zipCode, homePhone, cellPhone, email, state;
+    private Button saveContact;
+    private BottomNavigationView navigation;
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -25,13 +31,16 @@ public class ContactListActivity extends AppCompatActivity {
         public boolean onNavigationItemSelected(@NonNull MenuItem item) {
             switch (item.getItemId()) {
                 case R.id.navigation_home:
-                    mTextMessage.setText(R.string.title_home);
+                    Intent contact_intent = new Intent(getApplicationContext(), ContactListActivity.class);
+                    startActivity(contact_intent);
                     return true;
                 case R.id.navigation_dashboard:
-                    mTextMessage.setText(R.string.title_dashboard);
+                    Intent dashboard_intent = new Intent(getApplicationContext(), ContactListActivity.class);
+                    startActivity(dashboard_intent);
                     return true;
-                case R.id.navigation_notifications:
-                    mTextMessage.setText(R.string.title_notifications);
+                case R.id.navigation_settings:
+                    Intent settings_intent = new Intent(getApplicationContext(), ContactSettingsActivity.class);
+                    startActivity(settings_intent);
                     return true;
             }
             return false;
@@ -43,11 +52,14 @@ public class ContactListActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_contact_list);
 
-        mTextMessage = findViewById(R.id.message);
-        BottomNavigationView navigation = findViewById(R.id.navigation);
+        mCurrentContact = new Contact();
+        final ContactViewModel contactViewModel = ViewModelProviders.of(this).get(ContactViewModel.class);
+
+        initializeViews();
+        initTextChangedEvents();
+
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
 
-        mCalendar = findViewById(R.id.img_bday_calendar);
         mCalendar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -56,9 +68,20 @@ public class ContactListActivity extends AppCompatActivity {
             }
         });
 
-        initializeViews();
-
-        mCurrentContact = new Contact();
+        saveContact.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mCurrentContact.setContactName(name.getText().toString());
+                mCurrentContact.setPhoneNumber(homePhone.getText().toString());
+                mCurrentContact.setCellNumber(cellPhone.getText().toString());
+                mCurrentContact.setCity(city.getText().toString());
+                mCurrentContact.setState(state.getText().toString());
+                mCurrentContact.setStreetAddress(streetAddress.getText().toString());
+                mCurrentContact.setZipCode(zipCode.getText().toString());
+                mCurrentContact.setEmail(email.getText().toString());
+                contactViewModel.saveContact(mCurrentContact);
+            }
+        });
     }
 
     private void initializeViews() {
@@ -70,6 +93,19 @@ public class ContactListActivity extends AppCompatActivity {
         state = findViewById(R.id.editState);
         zipCode = findViewById(R.id.editZipCode);
         email = findViewById(R.id.editEMail);
+        birthday = findViewById(R.id.textBirthday);
+        saveContact = findViewById(R.id.saveContactBtn);
+        mCalendar = findViewById(R.id.img_bday_calendar);
+
+        //bottom nav
+        mTextMessage = findViewById(R.id.message);
+        navigation = findViewById(R.id.navigation);
+    }
+
+    private void initTextChangedEvents() {
+
+        homePhone.addTextChangedListener(new PhoneNumberFormattingTextWatcher());
+        cellPhone.addTextChangedListener(new PhoneNumberFormattingTextWatcher());
     }
 
 }

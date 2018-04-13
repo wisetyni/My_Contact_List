@@ -43,9 +43,9 @@ public class BirthdayPickerFragment extends DialogFragment implements DatePicker
     public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
 
 
-        TextView textview = (TextView)getActivity().findViewById(R.id.textBirthday);
+        TextView birthday = getActivity().findViewById(R.id.textBirthday);
 
-        textview.setText((month+1) + "/" + dayOfMonth + "/" + year);
+        birthday.setText((month+1) + "/" + dayOfMonth + "/" + year);
 
     }
 }
