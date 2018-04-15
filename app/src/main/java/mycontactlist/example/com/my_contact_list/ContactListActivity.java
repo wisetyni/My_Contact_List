@@ -1,6 +1,7 @@
 package mycontactlist.example.com.my_contact_list;
 
 import android.arch.lifecycle.ViewModelProviders;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
@@ -14,6 +15,7 @@ import android.support.v7.widget.Toolbar;
 import android.telephony.PhoneNumberFormattingTextWatcher;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -22,11 +24,10 @@ import android.widget.TextView;
 
 public class ContactListActivity extends AppCompatActivity {
 
-    private TextView mTextMessage, birthday;
+    private TextView mTextMessage, birthday, save;
     private ImageView mCalendar;
     private Contact mCurrentContact;
     private EditText name, streetAddress, city, zipCode, homePhone, cellPhone, email, state;
-    private Button saveContact;
     private BottomNavigationView navigation;
     private RelativeLayout relativeLayout;
     private SharedPreferences mSharedPreferences;
@@ -80,7 +81,7 @@ public class ContactListActivity extends AppCompatActivity {
             }
         });
 
-        saveContact.setOnClickListener(new View.OnClickListener() {
+        save.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 mCurrentContact.setContactName(name.getText().toString());
@@ -92,6 +93,7 @@ public class ContactListActivity extends AppCompatActivity {
                 mCurrentContact.setZipCode(zipCode.getText().toString());
                 mCurrentContact.setEmail(email.getText().toString());
                 contactViewModel.saveContact(mCurrentContact);
+                hideKeyboard();
             }
         });
     }
@@ -109,7 +111,7 @@ public class ContactListActivity extends AppCompatActivity {
         zipCode = findViewById(R.id.editZipCode);
         email = findViewById(R.id.editEMail);
         birthday = findViewById(R.id.textBirthday);
-        saveContact = findViewById(R.id.saveContactBtn);
+        save = findViewById(R.id.save);
         mCalendar = findViewById(R.id.img_bday_calendar);
 
         //bottom nav
@@ -121,6 +123,18 @@ public class ContactListActivity extends AppCompatActivity {
 
         homePhone.addTextChangedListener(new PhoneNumberFormattingTextWatcher());
         cellPhone.addTextChangedListener(new PhoneNumberFormattingTextWatcher());
+    }
+
+    private void hideKeyboard() {
+        InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(name.getWindowToken(), 0);
+        imm.hideSoftInputFromWindow(streetAddress.getWindowToken(), 0);
+        imm.hideSoftInputFromWindow(city.getWindowToken(), 0);
+        imm.hideSoftInputFromWindow(state.getWindowToken(), 0);
+        imm.hideSoftInputFromWindow(zipCode.getWindowToken(), 0);
+        imm.hideSoftInputFromWindow(homePhone.getWindowToken(), 0);
+        imm.hideSoftInputFromWindow(cellPhone.getWindowToken(), 0);
+        imm.hideSoftInputFromWindow(email.getWindowToken(), 0);
     }
 
 }
