@@ -20,18 +20,17 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textColor="@color/white"
-        android:gravity="left"
         tools:text="OFF"
         android:id="@+id/off"
         style="@style/TextAppearance.AppCompat.Widget.ActionBar.Title"/>
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textColor="@color/white"
-            android:gravity="right"
-            tools:text="SAVE"
-            android:id="@+id/save"
-            style="@style/TextAppearance.AppCompat.Widget.ActionBar.Title"/>
+
+        <!--<TextView-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:textColor="@color/white"-->
+            <!--tools:text="SAVE"-->
+            <!--android:id="@+id/save"-->
+            <!--style="@style/TextAppearance.AppCompat.Widget.ActionBar.Title"/>-->
     </android.support.v7.widget.Toolbar>
 
     <ScrollView

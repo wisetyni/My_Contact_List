@@ -18,6 +18,7 @@ import android.preference.PreferenceManager;
 import android.preference.RingtonePreference;
 import android.text.TextUtils;
 import android.view.MenuItem;
+import android.view.Window;
 
 import java.util.List;
 
@@ -180,6 +181,7 @@ public class ContactSettingsActivity extends AppCompatPreferenceActivity {
             bindPreferenceSummaryToValue(findPreference("sort_order"));
             bindPreferenceSummaryToValue(findPreference("sort_contact_by"));
             bindPreferenceSummaryToValue(findPreference("background_color"));
+            //Window window = getActivity().getWindow().getWindowStyle().
         }
 
         @Override

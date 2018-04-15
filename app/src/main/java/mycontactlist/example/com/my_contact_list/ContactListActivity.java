@@ -2,17 +2,22 @@ package mycontactlist.example.com.my_contact_list;
 
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.telephony.PhoneNumberFormattingTextWatcher;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 public class ContactListActivity extends AppCompatActivity {
@@ -23,6 +28,9 @@ public class ContactListActivity extends AppCompatActivity {
     private EditText name, streetAddress, city, zipCode, homePhone, cellPhone, email, state;
     private Button saveContact;
     private BottomNavigationView navigation;
+    private RelativeLayout relativeLayout;
+    private SharedPreferences mSharedPreferences;
+    private Toolbar toolbar;
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -58,6 +66,10 @@ public class ContactListActivity extends AppCompatActivity {
         initializeViews();
         initTextChangedEvents();
 
+        relativeLayout.setBackgroundColor(Color.parseColor(mSharedPreferences.getString("background_color", "#111111")));
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
+
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
 
         mCalendar.setOnClickListener(new View.OnClickListener() {
@@ -85,6 +97,9 @@ public class ContactListActivity extends AppCompatActivity {
     }
 
     private void initializeViews() {
+        relativeLayout = findViewById(R.id.container);
+        toolbar = findViewById(R.id.toolbar);
+        mSharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         name = findViewById(R.id.editName);
         homePhone = findViewById(R.id.editHomePhone);
         cellPhone = findViewById(R.id.editCell);
