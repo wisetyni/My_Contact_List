@@ -88,14 +88,14 @@
         <item>#8BC34A</item>
     </string-array>
     <!--<string-array name="pref_background_color_list_values">-->
-        <!--<item>@color/white</item>-->
-        <!--<item>@color/pink</item>-->
-        <!--<item>@color/cyan</item>-->
-        <!--<item>@color/purple</item>-->
-        <!--<item>@color/orange</item>-->
-        <!--<item>@color/yellow</item>-->
-        <!--<item>@color/teal</item>-->
-        <!--<item>@color/lightGreen</item>-->
+    <!--<item>@color/white</item>-->
+    <!--<item>@color/pink</item>-->
+    <!--<item>@color/cyan</item>-->
+    <!--<item>@color/purple</item>-->
+    <!--<item>@color/orange</item>-->
+    <!--<item>@color/yellow</item>-->
+    <!--<item>@color/teal</item>-->
+    <!--<item>@color/lightGreen</item>-->
     <!--</string-array>-->
 
     <!-- Example settings for Data & Sync -->
