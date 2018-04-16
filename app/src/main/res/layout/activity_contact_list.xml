@@ -8,31 +8,6 @@
     android:layout_height="match_parent"
     tools:context="mycontactlist.example.com.my_contact_list.ContactListActivity">
 
-    <!--<LinearLayout-->
-        <!--android:id="@+id/topActions"-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:orientation="horizontal"-->
-        <!--android:background="@color/colorPrimaryDark">-->
-
-            <!--<TextView-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:textColor="@color/white"-->
-            <!--android:text="OFF"-->
-            <!--tools:text="OFF"-->
-            <!--android:id="@+id/off" />-->
-
-            <!--<TextView-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:textColor="@color/white"-->
-            <!--android:text="SAVE"-->
-            <!--tools:text="SAVE"-->
-            <!--android:id="@+id/save"/>-->
-
-    <!--</LinearLayout>-->
-
     <android.support.v7.widget.Toolbar
         android:id="@+id/toolbar"
         android:layout_alignParentTop="true"

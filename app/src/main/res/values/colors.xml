@@ -12,4 +12,12 @@
     <color name="purple">#9C27B0</color>
     <color name="pink">#E91E63</color>
 
-</resources>
+
+    <color name="navbar_background">#1a1a48</color>
+    <color name="toolbar_background">#bebebe</color>
+    <color name="system_red">#ff0000</color>
+    <color name="system_white">#ffffff</color>
+    <color name="system_blue">#0000ff</color>
+
+
+    </resources>
