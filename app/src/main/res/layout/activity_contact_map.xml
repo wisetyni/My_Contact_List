@@ -1,5 +1,6 @@
 <?xml version="1.0"?>
 <RelativeLayout tools:context="mycontactlist.example.com.my_contact_list.ContactMapActivity"
+    android:id="@+id/mapContainer"
     android:layout_height="match_parent"
     android:layout_width="match_parent"
     xmlns:tools="http://schemas.android.com/tools"
