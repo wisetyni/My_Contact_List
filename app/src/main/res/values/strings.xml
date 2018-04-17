@@ -1,5 +1,6 @@
 <resources>
     <string name="app_name">My Contact List</string>
+    <string name="title_activity_contact_map">Contacts Map</string>
     <string name="title_home">Home</string>
     <string name="title_dashboard">Dashboard</string>
     <string name="title_contact">Contact</string>
@@ -90,14 +91,14 @@
         <item>#8BC34A</item>
     </string-array>
     <!--<string-array name="pref_background_color_list_values">-->
-        <!--<item>@color/white</item>-->
-        <!--<item>@color/pink</item>-->
-        <!--<item>@color/cyan</item>-->
-        <!--<item>@color/purple</item>-->
-        <!--<item>@color/orange</item>-->
-        <!--<item>@color/yellow</item>-->
-        <!--<item>@color/teal</item>-->
-        <!--<item>@color/lightGreen</item>-->
+    <!--<item>@color/white</item>-->
+    <!--<item>@color/pink</item>-->
+    <!--<item>@color/cyan</item>-->
+    <!--<item>@color/purple</item>-->
+    <!--<item>@color/orange</item>-->
+    <!--<item>@color/yellow</item>-->
+    <!--<item>@color/teal</item>-->
+    <!--<item>@color/lightGreen</item>-->
     <!--</string-array>-->
 
     <!-- Example settings for Data & Sync -->
@@ -146,6 +147,7 @@
     <string name="pref_ringtone_silent">Silent</string>
 
     <string name="pref_title_vibrate">Vibrate</string>
+    <string name="title_activity_maps">Map</string>
 
 
 </resources>

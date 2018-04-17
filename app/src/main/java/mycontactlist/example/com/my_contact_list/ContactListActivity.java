@@ -16,7 +16,6 @@ import android.telephony.PhoneNumberFormattingTextWatcher;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
@@ -43,8 +42,8 @@ public class ContactListActivity extends AppCompatActivity {
                     Intent contact_intent = new Intent(getApplicationContext(), ContactListActivity.class);
                     startActivity(contact_intent);
                     return true;
-                case R.id.navigation_dashboard:
-                    Intent dashboard_intent = new Intent(getApplicationContext(), ContactListActivity.class);
+                case R.id.navigation_map:
+                    Intent dashboard_intent = new Intent(getApplicationContext(), ContactMapActivity.class);
                     startActivity(dashboard_intent);
                     return true;
                 case R.id.navigation_settings:
@@ -62,7 +61,6 @@ public class ContactListActivity extends AppCompatActivity {
         setContentView(R.layout.activity_contact_list);
 
         mCurrentContact = new Contact();
-        final ContactViewModel contactViewModel = ViewModelProviders.of(this).get(ContactViewModel.class);
 
         initializeViews();
         initTextChangedEvents();
@@ -84,6 +82,7 @@ public class ContactListActivity extends AppCompatActivity {
         save.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                hideKeyboard();
                 mCurrentContact.setContactName(name.getText().toString());
                 mCurrentContact.setPhoneNumber(homePhone.getText().toString());
                 mCurrentContact.setCellNumber(cellPhone.getText().toString());
@@ -91,9 +90,28 @@ public class ContactListActivity extends AppCompatActivity {
                 mCurrentContact.setState(state.getText().toString());
                 mCurrentContact.setStreetAddress(streetAddress.getText().toString());
                 mCurrentContact.setZipCode(zipCode.getText().toString());
-                mCurrentContact.setEmail(email.getText().toString());
-                contactViewModel.saveContact(mCurrentContact);
-                hideKeyboard();
+                mCurrentContact.setEMail(email.getText().toString());
+
+
+                ContactDataSource ds = new ContactDataSource(ContactListActivity.this);
+                ds.open();
+
+                boolean wasSuccessful = false;
+                if (mCurrentContact.getContactID()==-1) {
+                    wasSuccessful = ds.insertContact(mCurrentContact);
+                    int newId = ds.getLastContactId();
+                    mCurrentContact.setContactID(newId);
+                }
+                else {
+                    wasSuccessful = ds.updateContact(mCurrentContact);
+                }
+                ds.close();
+
+//                if (wasSuccessful) {
+//                    ToggleButton editToggle = (ToggleButton) findViewById(R.id.toggleButtonEdit);
+//                    editToggle.toggle();
+//                    setForEditing(false);
+//                }
             }
         });
     }
