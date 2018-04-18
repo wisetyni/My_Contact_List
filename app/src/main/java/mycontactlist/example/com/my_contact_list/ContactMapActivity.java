@@ -1,18 +1,24 @@
 package mycontactlist.example.com.my_contact_list;
 
+import android.Manifest;
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Point;
 import android.location.Address;
 import android.location.Geocoder;
+import android.location.Location;
+import android.location.LocationManager;
+import android.location.LocationListener;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.ActivityCompat.OnRequestPermissionsResultCallback;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentActivity;
 import android.util.Log;
@@ -21,13 +27,16 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
-import android.widget.FrameLayout;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -35,19 +44,30 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.tasks.OnSuccessListener;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ContactMapActivity extends FragmentActivity implements OnMapReadyCallback {
+public class ContactMapActivity extends FragmentActivity implements OnMapReadyCallback, OnRequestPermissionsResultCallback {
 
     private static final String TAG = ContactMapActivity.class.getSimpleName();
+    public static final String LATITUDE_TEXT = "Latitude: ";
+    public static final String LONGITUDE_TEXT = "Longitude: ";
+    public static final String ACCURACY_TEXT = "Accuracy: ";
+    private static final int MY_PERMISSIONS_REQUEST_LOCATION = 1;
     private GoogleMap mGoogleMap;
     private BottomNavigationView navigation;
     private RelativeLayout mapContainer;
     private ArrayList<Contact> mContacts;
     private Contact currentContact;
+    private FusedLocationProviderClient mFusedLocationClient;
+    private TextView txtLatitude, txtLongitude, txtAccuracy;
+    private ImageView gpsImg, networkImg;
+    private LocationManager locationManager;
+    private LocationListener locationListener;
+    private LinearLayout sensorDetailsLL;
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -76,11 +96,20 @@ public class ContactMapActivity extends FragmentActivity implements OnMapReadyCa
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_contact_map);
 
-        mapContainer = findViewById(R.id.mapContainer);
-        View.inflate(this, R.layout.gps_sensor_overlay, mapContainer);
+        mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
+
+        initMapOverlay();
         initLocation();
         initMapType();
         initBottomNavigation();
+
+        txtLatitude = findViewById(R.id.latitude);
+        txtLongitude = findViewById(R.id.longitude);
+        txtAccuracy = findViewById(R.id.accuracy);
+        sensorDetailsLL = findViewById(R.id.sensor_details_ll);
+        locationManager = (LocationManager) getBaseContext().getSystemService(Context.LOCATION_SERVICE);
+        initGPSSensor();
+        initNtwkSensor();
 
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.contactMap);
@@ -103,6 +132,66 @@ public class ContactMapActivity extends FragmentActivity implements OnMapReadyCa
 
     }
 
+    private void initNtwkSensor() {
+        networkImg = findViewById(R.id.network_img);
+        networkImg.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                displayLocationUpdates(LocationManager.NETWORK_PROVIDER, networkImg);
+                gpsImg.setBackgroundColor(getResources().getColor(R.color.resetSensor));
+            }
+        });
+    }
+
+    private void initGPSSensor() {
+
+        gpsImg = findViewById(R.id.gps_img);
+        gpsImg.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                displayLocationUpdates(LocationManager.GPS_PROVIDER, gpsImg);
+                networkImg.setBackgroundColor(getResources().getColor(R.color.resetSensor));
+            }
+        });
+    }
+
+    private void displayLocationUpdates(String provider, ImageView img) {
+        sensorDetailsLL.setVisibility(View.VISIBLE);
+        img.setBackgroundColor(getResources().getColor(R.color.selectedSensor));
+
+        locationListener = new LocationListener() {
+            @Override
+            public void onLocationChanged(Location location) {
+                txtLatitude.setText(LATITUDE_TEXT + String.valueOf(location.getLatitude()));
+                txtAccuracy.setText(ACCURACY_TEXT + String.valueOf(location.getAccuracy()));
+                txtLongitude.setText(LONGITUDE_TEXT + String.valueOf(location.getLongitude()));
+            }
+
+            @Override
+            public void onStatusChanged(String s, int i, Bundle bundle) {}
+            @Override
+            public void onProviderEnabled(String s) {}
+            @Override
+            public void onProviderDisabled(String s) {}
+        };
+
+        if (ActivityCompat.checkSelfPermission(ContactMapActivity.this,
+                Manifest.permission.ACCESS_FINE_LOCATION)
+                != PackageManager.PERMISSION_GRANTED
+                && ActivityCompat.checkSelfPermission(ContactMapActivity.this,
+                Manifest.permission.ACCESS_COARSE_LOCATION)
+                != PackageManager.PERMISSION_GRANTED) {
+            askForLocationPermissions();
+        }else {
+            locationManager.requestLocationUpdates(provider, 0, 0, locationListener);
+        }
+    }
+
+    private void initMapOverlay() {
+        mapContainer = findViewById(R.id.mapContainer);
+        View.inflate(this, R.layout.sensor_overlay, mapContainer);
+    }
+
     private void initBottomNavigation() {
         navigation = findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
@@ -115,23 +204,60 @@ public class ContactMapActivity extends FragmentActivity implements OnMapReadyCa
                 String currentSetting = locationText.getText().toString();
                 if (currentSetting.equalsIgnoreCase("Location On")) {
                     locationText.setText("Location Off");
-                    if (ActivityCompat.checkSelfPermission(getApplicationContext(), android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getApplicationContext(), android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                        // TODO: Consider calling
-                        //    ActivityCompat#requestPermissions
-                        // here to request the missing permissions, and then overriding
-                        //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-                        //                                          int[] grantResults)
-                        // to handle the case where the user grants the permission. See the documentation
-                        // for ActivityCompat#requestPermissions for more details.
-                        return;
+                    if (ActivityCompat.checkSelfPermission(ContactMapActivity.this,
+                            android.Manifest.permission.ACCESS_FINE_LOCATION)
+                            != PackageManager.PERMISSION_GRANTED
+                            && ActivityCompat.checkSelfPermission(ContactMapActivity.this,
+                            android.Manifest.permission.ACCESS_COARSE_LOCATION)
+                            != PackageManager.PERMISSION_GRANTED) {
+                        askForLocationPermissions();
+
                     }
-                    mGoogleMap.setMyLocationEnabled(true);
+                    else{
+                        mGoogleMap.setMyLocationEnabled(true);
+                        mFusedLocationClient.getLastLocation().addOnSuccessListener(ContactMapActivity.this, new OnSuccessListener<Location>() {
+                            @Override
+                            public void onSuccess(Location location) {
+                                if (location != null){
+                                    LatLngBounds.Builder builder = new LatLngBounds.Builder();
+                                    LatLng point = new LatLng(location.getLatitude(), location.getLongitude());
+                                    builder.include(point);
+                                    mGoogleMap.addMarker(new MarkerOptions().position(point).title("Current Location").snippet(point.toString()));
+                                    mGoogleMap.moveCamera(CameraUpdateFactory.newLatLng(point));
+                                }
+                            }
+                        });
+                    }//end check permissions if/else
                 } else {
                     locationText.setText("Location On");
                     mGoogleMap.setMyLocationEnabled(false);
-                }
+                    mGoogleMap.clear();
+                }//end check if text is Location On
             }
         });
+    }
+
+    private void askForLocationPermissions() {
+
+        //request permissions for current location
+        ActivityCompat.requestPermissions(this,
+                new String[]{Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION},
+                MY_PERMISSIONS_REQUEST_LOCATION);
+
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        switch (requestCode){
+            case MY_PERMISSIONS_REQUEST_LOCATION: {
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    Log.d(TAG, "onRequestPermissionsResult: permission" + grantResults[0]);
+                }
+                return;
+            }
+            default: break;
+        }
     }
 
     private void initMapType() {
@@ -158,6 +284,13 @@ public class ContactMapActivity extends FragmentActivity implements OnMapReadyCa
     }
 
     public void onPause() {
+
+        try {
+            locationManager.removeUpdates(locationListener);
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
         super.onPause();
         finish();
     }
@@ -237,6 +370,7 @@ public class ContactMapActivity extends FragmentActivity implements OnMapReadyCa
             measuredWidth = d.getWidth();
             measuredHeight = d.getHeight() - 180;
         }
+
 
         if (mContacts.size() > 0) {
             LatLngBounds.Builder builder = new LatLngBounds.Builder();

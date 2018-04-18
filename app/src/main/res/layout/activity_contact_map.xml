@@ -21,7 +21,7 @@
         android:layout_height="match_parent"
         android:layout_alignParentTop="true"
         android:layout_above="@+id/navigation"
-        android:layout_below="@+id/toolbar"
+        android:layout_below="@+id/toolbar_map"
         android:name="com.google.android.gms.maps.SupportMapFragment"/>
 
     <android.support.v7.widget.Toolbar
@@ -55,30 +55,5 @@
             tools:text="Satellite View"
             style="@style/TextAppearance.AppCompat.Widget.ActionBar.Title"/>
     </android.support.v7.widget.Toolbar>
-
-    <!--<RelativeLayout-->
-        <!--android:id="@+id/toolbar"-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:layout_alignParentLeft="true"-->
-        <!--android:layout_alignParentTop="true"-->
-        <!--android:background="@color/toolbar_background" >-->
-
-        <!--<Button-->
-            <!--android:id="@+id/buttonShowMe"-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:layout_alignParentLeft="true"-->
-            <!--android:layout_marginLeft="20dp"-->
-            <!--android:text="Location On" />-->
-
-        <!--<Button-->
-            <!--android:id="@+id/buttonMapType"-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:layout_alignParentRight="true"-->
-            <!--android:layout_marginRight="20dp"-->
-            <!--android:text="Satellite View" />-->
-    <!--</RelativeLayout>-->
 </RelativeLayout>
 
