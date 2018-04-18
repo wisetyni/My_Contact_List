@@ -16,4 +16,9 @@
         android:icon="@drawable/ic_settings_black_24dp"
         android:title="@string/title_setting" />
 
+    <item
+        android:id="@+id/navigation_location"
+        android:icon="@drawable/ic_location_searching_black_24dp"
+        android:title="@string/title_location" />
+
 </menu>

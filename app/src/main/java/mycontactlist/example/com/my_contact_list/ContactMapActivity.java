@@ -53,9 +53,6 @@ import java.util.List;
 public class ContactMapActivity extends FragmentActivity implements OnMapReadyCallback, OnRequestPermissionsResultCallback {
 
     private static final String TAG = ContactMapActivity.class.getSimpleName();
-    public static final String LATITUDE_TEXT = "Latitude: ";
-    public static final String LONGITUDE_TEXT = "Longitude: ";
-    public static final String ACCURACY_TEXT = "Accuracy: ";
     private static final int MY_PERMISSIONS_REQUEST_LOCATION = 1;
     private GoogleMap mGoogleMap;
     private BottomNavigationView navigation;
@@ -63,33 +60,9 @@ public class ContactMapActivity extends FragmentActivity implements OnMapReadyCa
     private ArrayList<Contact> mContacts;
     private Contact currentContact;
     private FusedLocationProviderClient mFusedLocationClient;
-    private TextView txtLatitude, txtLongitude, txtAccuracy;
-    private ImageView gpsImg, networkImg;
-    private LocationManager locationManager;
-    private LocationListener locationListener;
-    private LinearLayout sensorDetailsLL;
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
-            = new BottomNavigationView.OnNavigationItemSelectedListener() {
-
-        @Override
-        public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-            switch (item.getItemId()) {
-                case R.id.navigation_home:
-                    Intent contact_intent = new Intent(getApplicationContext(), ContactListActivity.class);
-                    startActivity(contact_intent);
-                    return true;
-                case R.id.navigation_map:
-                    //do nothing since you are already on the map screen
-                    return true;
-                case R.id.navigation_settings:
-                    Intent settings_intent = new Intent(getApplicationContext(), ContactSettingsActivity.class);
-                    startActivity(settings_intent);
-                    return true;
-            }
-            return false;
-        }
-    };
+            = NavUtil.getBottomNav(this);
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -98,18 +71,9 @@ public class ContactMapActivity extends FragmentActivity implements OnMapReadyCa
 
         mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
 
-        initMapOverlay();
         initLocation();
         initMapType();
         initBottomNavigation();
-
-        txtLatitude = findViewById(R.id.latitude);
-        txtLongitude = findViewById(R.id.longitude);
-        txtAccuracy = findViewById(R.id.accuracy);
-        sensorDetailsLL = findViewById(R.id.sensor_details_ll);
-        locationManager = (LocationManager) getBaseContext().getSystemService(Context.LOCATION_SERVICE);
-        initGPSSensor();
-        initNtwkSensor();
 
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.contactMap);
@@ -130,66 +94,6 @@ public class ContactMapActivity extends FragmentActivity implements OnMapReadyCa
             ds.close();
         }
 
-    }
-
-    private void initNtwkSensor() {
-        networkImg = findViewById(R.id.network_img);
-        networkImg.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                displayLocationUpdates(LocationManager.NETWORK_PROVIDER, networkImg);
-                gpsImg.setBackgroundColor(getResources().getColor(R.color.resetSensor));
-            }
-        });
-    }
-
-    private void initGPSSensor() {
-
-        gpsImg = findViewById(R.id.gps_img);
-        gpsImg.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                displayLocationUpdates(LocationManager.GPS_PROVIDER, gpsImg);
-                networkImg.setBackgroundColor(getResources().getColor(R.color.resetSensor));
-            }
-        });
-    }
-
-    private void displayLocationUpdates(String provider, ImageView img) {
-        sensorDetailsLL.setVisibility(View.VISIBLE);
-        img.setBackgroundColor(getResources().getColor(R.color.selectedSensor));
-
-        locationListener = new LocationListener() {
-            @Override
-            public void onLocationChanged(Location location) {
-                txtLatitude.setText(LATITUDE_TEXT + String.valueOf(location.getLatitude()));
-                txtAccuracy.setText(ACCURACY_TEXT + String.valueOf(location.getAccuracy()));
-                txtLongitude.setText(LONGITUDE_TEXT + String.valueOf(location.getLongitude()));
-            }
-
-            @Override
-            public void onStatusChanged(String s, int i, Bundle bundle) {}
-            @Override
-            public void onProviderEnabled(String s) {}
-            @Override
-            public void onProviderDisabled(String s) {}
-        };
-
-        if (ActivityCompat.checkSelfPermission(ContactMapActivity.this,
-                Manifest.permission.ACCESS_FINE_LOCATION)
-                != PackageManager.PERMISSION_GRANTED
-                && ActivityCompat.checkSelfPermission(ContactMapActivity.this,
-                Manifest.permission.ACCESS_COARSE_LOCATION)
-                != PackageManager.PERMISSION_GRANTED) {
-            askForLocationPermissions();
-        }else {
-            locationManager.requestLocationUpdates(provider, 0, 0, locationListener);
-        }
-    }
-
-    private void initMapOverlay() {
-        mapContainer = findViewById(R.id.mapContainer);
-        View.inflate(this, R.layout.sensor_overlay, mapContainer);
     }
 
     private void initBottomNavigation() {
@@ -283,17 +187,6 @@ public class ContactMapActivity extends FragmentActivity implements OnMapReadyCa
         return true;
     }
 
-    public void onPause() {
-
-        try {
-            locationManager.removeUpdates(locationListener);
-        }
-        catch (Exception e) {
-            e.printStackTrace();
-        }
-        super.onPause();
-        finish();
-    }
 
     @Override
     public void onResume() {

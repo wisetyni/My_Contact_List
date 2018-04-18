@@ -6,6 +6,7 @@
     <string name="title_contact">Contact</string>
     <string name="title_map">Map</string>
     <string name="title_setting">Setting</string>
+    <string name="title_location">Location</string>
     <string name="title_notifications">Notifications</string>
     <string name="hint_contact_name">Contact Name</string>
     <string name="hint_contact_address">Address</string>

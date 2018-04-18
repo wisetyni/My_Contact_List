@@ -33,27 +33,7 @@ public class ContactListActivity extends AppCompatActivity {
     private Toolbar toolbar;
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
-            = new BottomNavigationView.OnNavigationItemSelectedListener() {
-
-        @Override
-        public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-            switch (item.getItemId()) {
-                case R.id.navigation_home:
-                    Intent contact_intent = new Intent(getApplicationContext(), ContactListActivity.class);
-                    startActivity(contact_intent);
-                    return true;
-                case R.id.navigation_map:
-                    Intent dashboard_intent = new Intent(getApplicationContext(), ContactMapActivity.class);
-                    startActivity(dashboard_intent);
-                    return true;
-                case R.id.navigation_settings:
-                    Intent settings_intent = new Intent(getApplicationContext(), ContactSettingsActivity.class);
-                    startActivity(settings_intent);
-                    return true;
-            }
-            return false;
-        }
-    };
+            = NavUtil.getBottomNav(this);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,7 +45,8 @@ public class ContactListActivity extends AppCompatActivity {
         initializeViews();
         initTextChangedEvents();
 
-        relativeLayout.setBackgroundColor(Color.parseColor(mSharedPreferences.getString("background_color", "#111111")));
+        int savedBgColor = mSharedPreferences.getInt("background_color", R.color.white);
+        relativeLayout.setBackgroundColor(getResources().getColor(savedBgColor));
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
 

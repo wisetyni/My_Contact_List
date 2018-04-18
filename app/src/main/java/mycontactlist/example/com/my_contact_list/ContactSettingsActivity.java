@@ -3,6 +3,7 @@ package mycontactlist.example.com.my_contact_list;
 import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
+import android.support.design.widget.BottomNavigationView;
 import android.view.Menu;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
@@ -10,9 +11,13 @@ import android.widget.RadioGroup.OnCheckedChangeListener;
 import android.widget.ScrollView;
 
 public class ContactSettingsActivity extends Activity {
-    RadioButton rbName, rbCity, rbBirthDay, rbAscending, rbDescending;
-    RadioGroup rgSortBy, rgSortOrder, rgBackgroundColor;
-    RadioButton rbWhite, rbPink, rbOrange, rbPurple, rbCyan;
+    private RadioButton rbName, rbCity, rbBirthDay, rbAscending, rbDescending;
+    private RadioGroup rgSortBy, rgSortOrder, rgBackgroundColor;
+    private RadioButton rbWhite, rbPink, rbOrange, rbPurple, rbCyan;
+    private BottomNavigationView navigation;
+
+    private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
+            = NavUtil.getBottomNav(this);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -24,6 +29,7 @@ public class ContactSettingsActivity extends Activity {
         initSortOrderClick();
         initBackgroundColorClick();
         initScrollViewBackground();
+        initBottomNavigation();
 
     }
 
@@ -32,6 +38,11 @@ public class ContactSettingsActivity extends Activity {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.contact_settings, menu);
         return true;
+    }
+
+    private void initBottomNavigation() {
+        navigation = findViewById(R.id.navigation);
+        navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
     }
 
     private void initSettings() {
