@@ -67,7 +67,8 @@ public class ContactListActivity extends AppCompatActivity {
         initializeViews();
         initTextChangedEvents();
 
-        relativeLayout.setBackgroundColor(Color.parseColor(mSharedPreferences.getString("background_color", "#111111")));
+        int savedBgColor = mSharedPreferences.getInt("background_color", R.color.white);
+        relativeLayout.setBackgroundColor(getResources().getColor(savedBgColor));
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
 
