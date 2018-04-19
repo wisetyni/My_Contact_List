@@ -44,6 +44,15 @@
             style="@style/TextAppearance.AppCompat.Widget.ActionBar.Title"/>
 
         <TextView
+            android:id="@+id/textHeading"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingLeft="20dp"
+            android:text="WNW"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:textColor="@color/white" />
+
+        <TextView
             android:id="@+id/mapType"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
